@@ -1,15 +1,16 @@
 from splinter import Browser
 from bs4 import BeautifulSoup
 import requests
+import pandas as pd
 
 def init_browser():
+    # executable_path = {'executable_path': 'chromedriver.exe'}
+    # browser = Browser('chrome', **executable_path, headless=False)
+
     executable_path = {'executable_path': 'chromedriver.exe'}
-    browser = Browser('chrome', **executable_path, headless=False)
-
-
+    return Browser('chrome', **executable_path, headless=False)
 
 def scrape():
-
     browser = init_browser()
 
 # Nasa Mars News
@@ -60,12 +61,17 @@ def scrape():
     html = browser.html
     facts = pd.read_html(url_facts)
 
-# Mars Hemispheres
+    facts_df = facts[0]
+    facts_df.columns = ['0','1']
+    facts_df.rename(columns={'0':'Facts','1':'Data'}, inplace=True)
+    facts_df.set_index('Facts', inplace=True)
+    facts_table = facts_df.to_html()
+    facts_table.replace('\n', '')
+    mars_table = facts_table
 
-    # URL of page to be scraped
-    url_hemispheres = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
-    browser.visit(url_hemispheres)
-    hemispheres = []
+# Mars Hemispheres
+    hemisphere_img_urls = []
+    hemisphere_titles = []
 
     for x in range(0,4):
     
@@ -76,7 +82,7 @@ def scrape():
         #Find and save titles
         html = browser.html
         soup = BeautifulSoup(html, 'html.parser')
-        hemisphere_title = soup.find_all('h3')[x].text
+        hemisphere_titles.append(soup.find_all('h3')[x].text)
     
         # Find and save image urls
         html = browser.html
@@ -88,17 +94,26 @@ def scrape():
         block = soup.find_all(class_='downloads')
 
         for link in block:
-            hemisphere_img = link.find('a')['href']
-        
-        hemispheres.append({'title':hemisphere_title,'img_url':hemisphere_img})
+            hemisphere_img_urls.append(link.find('a')['href'])
+
+
+
 
     # Store data in a dictionary
     mars_data = {
         "mars_headline": headline,
         "mars_blurb": blurb, 
         "mars_featured_image": featured_image_url,
+        "mars_facts": mars_table,
         "mars_weather": mars_weather,
-        "hemisphere_info": hemispheres
+        "hemisphere_1_url": hemisphere_img_urls[0],
+        "hemisphere_2_url": hemisphere_img_urls[1],
+        "hemisphere_3_url": hemisphere_img_urls[2],
+        "hemisphere_4_url": hemisphere_img_urls[3],
+        "hemisphere_1_title": hemisphere_titles[0],
+        "hemisphere_2_title": hemisphere_titles[1],
+        "hemisphere_3_title": hemisphere_titles[2],
+        "hemisphere_4_title": hemisphere_titles[3],
         }
 
     # Close the browser after scraping

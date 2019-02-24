@@ -5,23 +5,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Costa Rica Weather</title>
+  <title>Mission to Mars</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
 <body>
-  <div class="container-fluid">
+  <div class="container">
+
     <div class="jumbotron text-center">
-      <h1>Visit the...</h1>
-      <p>Beach. Rainforest. Volcano. Tree House. Sloths.</p>
-      <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Get Data!</a></p>
+          <h1>Mission to Mars</h1>
+          <p>Hit "Launch" to Scrape New Data!</p>
+          <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Launch</a></p>
     </div>
-    <img src="{{ vacation.sloth_img }}" alt="Sloth">
-    <h2>The typical weather in Costa Rica is:</h2>
-    <h3>Max Temp: {{ vacation.max_temp }}</h3>
-    <h3>Min Temp: {{ vacation.min_temp }}</h3>
-  </div>
+
+    <div class="row">
+        <div class="col-md-12">
+          <h1>Latest Mars News</h1> 
+          <h3> {{ mars_data.mars_headline }} </h3>
+          <p> {{ mars_data.mars_blurb }} </p>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <img src= "{{ mars_data.mars_featured_image }}" object-fit="cover">
+    </div>
+
+    <div class="col-md-4">
+        <h3>Current Weather on Mars</h3>
+        <p> {{ mars_data.mars_weather }} </p>
+        <h3>Mars Facts</h3>
+        {{ mars_data.mars_facts | safe}}
+      </div>
+    </div>
+
+    <h1 style="text-align: center">Mars Hemispheres</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src= "{{ mars_data.hemisphere_1_url }}" width=450px>
+            <h3>{{ mars_data.hemisphere_1_title }}</h3>
+        </div>
+        <div class="col-md-6">
+            <img src= "{{ mars_data.hemisphere_2_url }}" width=450px>
+            <h3>{{ mars_data.hemisphere_2_title }}</h3>
+        </div>
+        <div class="col-md-6">
+            <img src= "{{ mars_data.hemisphere_3_url }}" width=450px>
+            <h3>{{ mars_data.hemisphere_3_title }}</h3>
+        </div>
+        <div class="col-md-6">
+            <img src= "{{ mars_data.hemisphere_4_url }}" width=450px>
+            <h3>{{ mars_data.hemisphere_4_title }}</h3>
+        </div>
+
+
+    </div>
+
   </div>
 </body>
-
 </html>
